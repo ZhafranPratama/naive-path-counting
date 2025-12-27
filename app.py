@@ -41,7 +41,7 @@ def path_count_iteratif(n):
 n = st.number_input(
     "Masukkan ukuran grid (n x n)",
     min_value=1,
-    max_value=15,
+    max_value=10000,
     value=5,
     step=1,
     help="Nilai besar akan membuat algoritma rekursif sangat lambat"
