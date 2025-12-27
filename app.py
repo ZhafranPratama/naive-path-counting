@@ -1,5 +1,7 @@
 import streamlit as st
 import time
+import matplotlib.pyplot as plt
+import numpy as np
 
 st.set_page_config(
     page_title="Naive Path Counting Analysis",
@@ -84,3 +86,57 @@ if st.button("🔍 Jalankan Analisis"):
     - Algoritma iteratif (Dynamic Programming) lebih optimal
     - Perbedaan kompleksitas *sangat signifikan* seiring pertumbuhan n
     """)
+
+    # Membuat grafik perbandingan
+    st.write("## 📈 Grafik Perbandingan Waktu Eksekusi")
+    
+    # Jalankan benchmark untuk nilai-nilai berbeda
+    benchmark_range = list(range(1, n + 1))
+    waktu_iteratif_list = []
+    waktu_rekursif_list = []
+
+    with st.spinner("🔄 Sedang membuat grafik perbandingan..."):
+        for val in benchmark_range:
+            # Waktu iteratif
+            t0 = time.perf_counter()
+            path_count_iteratif(val)
+            t1 = time.perf_counter()
+            waktu_iteratif_list.append(t1 - t0)
+
+            # Waktu rekursif (skip jika sudah terlalu besar)
+            if val <= 20:
+                t2 = time.perf_counter()
+                path_count_rekursif(val, val)
+                t3 = time.perf_counter()
+                waktu_rekursif_list.append(t3 - t2)
+            else:
+                waktu_rekursif_list.append(None)
+
+    # Membuat figure matplotlib
+    fig, ax = plt.subplots(figsize=(10, 6))
+
+    # Plot iteratif
+    ax.plot(benchmark_range, waktu_iteratif_list, marker='o', 
+            linewidth=2.5, markersize=8, label='Algoritma Iteratif (DP)', 
+            color='#2ecc71', alpha=0.8)
+
+    # Plot rekursif (hanya yang ada datanya)
+    waktu_rekursif_dengan_range = [(benchmark_range[i], waktu_rekursif_list[i]) 
+                                    for i in range(len(benchmark_range)) 
+                                    if waktu_rekursif_list[i] is not None]
+    if waktu_rekursif_dengan_range:
+        range_rekursif, waktu_rekursif_filtered = zip(*waktu_rekursif_dengan_range)
+        ax.plot(range_rekursif, waktu_rekursif_filtered, marker='s', 
+                linewidth=2.5, markersize=8, label='Algoritma Rekursif Naive', 
+                color='#e74c3c', alpha=0.8)
+
+    ax.set_xlabel('Ukuran Grid (n x n)', fontsize=12, fontweight='bold')
+    ax.set_ylabel('Waktu Eksekusi (detik)', fontsize=12, fontweight='bold')
+    ax.set_title('Perbandingan Waktu Eksekusi: Iteratif vs Rekursif', 
+                 fontsize=14, fontweight='bold')
+    ax.grid(True, alpha=0.3, linestyle='--')
+    ax.legend(fontsize=11, loc='upper left')
+    ax.set_yscale('log')  # Menggunakan skala logaritmik untuk visualisasi lebih baik
+
+    plt.tight_layout()
+    st.pyplot(fig)
