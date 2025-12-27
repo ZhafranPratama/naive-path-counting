@@ -58,7 +58,7 @@ if st.button("🔍 Jalankan Analisis"):
     t3 = time.perf_counter()
     waktu_rekursif = t3 - t2
 
-    st.write("## 📌 Hasil Perhitungan")
+    st.write("## Hasil Perhitungan")
 
     col1, col2 = st.columns(2)
 
