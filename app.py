@@ -87,13 +87,10 @@ if st.button("🔍 Jalankan Analisis"):
             t1 = time.perf_counter()
             waktu_iteratif_list.append(t1 - t0)
 
-            if val <= 20:
-                t2 = time.perf_counter()
-                path_count_rekursif(val, val)
-                t3 = time.perf_counter()
-                waktu_rekursif_list.append(t3 - t2)
-            else:
-                waktu_rekursif_list.append(None)
+            t2 = time.perf_counter()
+            path_count_rekursif(val, val)
+            t3 = time.perf_counter()
+            waktu_rekursif_list.append(t3 - t2)
 
     fig, ax = plt.subplots(figsize=(10, 6))
 
